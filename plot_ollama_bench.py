@@ -6,7 +6,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-REPORT_DIR = "cmd/bench/report"
+DEFAULT_REPORT_DIR = "cmd/bench/report"
 
 def parse_raw_bench():
     content = sys.stdin.read()
@@ -160,7 +160,8 @@ def generate_plot(data, output_filename=None):
         if len(output_filename) > 120:
             output_filename = "ollama_multi_model_comparison.png"
 
-        output_filename = os.path.join(REPORT_DIR, output_filename)
+        report_dir = os.getenv("REPORT_DIR", DEFAULT_REPORT_DIR)
+        output_filename = os.path.join(report_dir, output_filename)
 
     output_dir = os.path.dirname(output_filename)
     if output_dir:

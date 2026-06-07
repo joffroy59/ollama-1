@@ -153,6 +153,7 @@ done
 
 echo ""
 echo "📊 Generating comparison chart..."
+export REPORT_DIR
 cat "$LOG_FILE" | python3 "$PLOT_SCRIPT"
 
 echo "--------------------------------------------------"
@@ -161,6 +162,6 @@ echo "✅ Workflow complete! Raw log data saved to '$LOG_FILE'."
 # Create a generic symlink to the latest generated chart for quick viewing
 GENERATED_CHART="${CLEAN_MODELS}.png"
 if [ -f "$GENERATED_CHART" ]; then
-    ln -sf "$GENERATED_CHART" latest_comparison.png
-    echo "🔗 Linked '$GENERATED_CHART' -> 'latest_comparison.png'"
+    ln -sf "$GENERATED_CHART" ${REPORT_DIR}/latest_comparison.png
+    echo "🔗 Linked '$GENERATED_CHART' -> '${REPORT_DIR}/latest_comparison.png'"
 fi
