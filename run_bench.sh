@@ -72,6 +72,10 @@ run_with_progress_bar() {
     local i=0
     local spin_char
     local percent
+    local base_filled
+    local next_filled
+    local slot
+    local running_filled
     local filled
     local empty
     local done_bar
@@ -84,9 +88,21 @@ run_with_progress_bar() {
 
     while kill -0 "$pid" 2>/dev/null; do
         spin_char="${spin:$((i % 4)):1}"
-        percent=$(( completed * 100 / total ))
-        filled=$(( completed * BAR_WIDTH / total ))
+        base_filled=$(( completed * BAR_WIDTH / total ))
+        next_filled=$(( (completed + 1) * BAR_WIDTH / total ))
+        slot=$(( next_filled - base_filled ))
+        if [ "$slot" -lt 1 ]; then
+            slot=1
+        fi
+
+        running_filled=$(( base_filled + (i % (slot + 1)) ))
+        if [ "$running_filled" -gt "$next_filled" ]; then
+            running_filled="$next_filled"
+        fi
+
+        filled="$running_filled"
         empty=$(( BAR_WIDTH - filled ))
+        percent=$(( filled * 100 / BAR_WIDTH ))
         done_bar=$(printf '%*s' "$filled" '' | tr ' ' '#')
         todo_bar=$(printf '%*s' "$empty" '' | tr ' ' '-')
         now=$(date +%s)
