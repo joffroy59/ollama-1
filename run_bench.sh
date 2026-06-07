@@ -47,16 +47,46 @@ IFS=',' read -ra MODEL_ARRAY <<< "$MODELS"
 TOTAL_MODELS=${#MODEL_ARRAY[@]}
 CURRENT=0
 
+run_with_spinner() {
+    local pid="$1"
+    local label="$2"
+    local spin='|/-\\'
+    local i=0
+
+    while kill -0 "$pid" 2>/dev/null; do
+        i=$(( (i + 1) % 4 ))
+        printf "\r%s %s" "${spin:$i:1}" "$label"
+        sleep 0.1
+    done
+
+    printf "\r"
+}
+
 # Clear log file
 > "$LOG_FILE"
 
 for MODEL in "${MODEL_ARRAY[@]}"; do
     CURRENT=$((CURRENT + 1))
     PROGRESS="[$CURRENT/$TOTAL_MODELS]"
+    MODEL_LOG=$(mktemp)
+
     echo ""
     echo "⏳ $PROGRESS Benchmarking: $MODEL"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    ./ollama-bench -model "$MODEL" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" >> "$LOG_FILE"
+
+    ./ollama-bench -model "$MODEL" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" > "$MODEL_LOG" 2>&1 &
+    BENCH_PID=$!
+    run_with_spinner "$BENCH_PID" "$PROGRESS Running $MODEL"
+
+    if ! wait "$BENCH_PID"; then
+        cat "$MODEL_LOG" >> "$LOG_FILE"
+        rm -f "$MODEL_LOG"
+        echo "❌ Failed: $MODEL"
+        exit 1
+    fi
+
+    cat "$MODEL_LOG" >> "$LOG_FILE"
+    rm -f "$MODEL_LOG"
     echo "✅ Completed: $MODEL"
 done
 
