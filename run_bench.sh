@@ -68,6 +68,9 @@ run_with_progress_bar() {
     local completed="$2"
     local total="$3"
     local model="$4"
+    local spin='|/-\\'
+    local i=0
+    local spin_char
     local percent
     local filled
     local empty
@@ -80,6 +83,7 @@ run_with_progress_bar() {
     started_at=$(date +%s)
 
     while kill -0 "$pid" 2>/dev/null; do
+        spin_char="${spin:$((i % 4)):1}"
         percent=$(( completed * 100 / total ))
         filled=$(( completed * BAR_WIDTH / total ))
         empty=$(( BAR_WIDTH - filled ))
@@ -88,7 +92,8 @@ run_with_progress_bar() {
         now=$(date +%s)
         elapsed=$(( now - started_at ))
 
-        printf "\r[%s%s] %3d%% (%d/%d) Running: %s (%ss)" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$model" "$elapsed"
+        printf "\r%s [%s%s] %3d%% (%d/%d) Running: %s (%ss)" "$spin_char" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$model" "$elapsed"
+        i=$((i + 1))
         sleep 0.1
     done
 
