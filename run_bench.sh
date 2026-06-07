@@ -18,15 +18,23 @@ else
     MODELS="${MODELS:-gemma4}"
 fi
 
-# Generate a clean default bench filename based on the models string
-# Replaces colons and commas with underscores
-CLEAN_MODELS=$(echo "$MODELS" | sed 's/[:]/_/g' | sed 's/,/_vs_/g')
-DEFAULT_LOG_FILE="${CLEAN_MODELS}.bench"
+MODEL_COUNT=$(awk -F',' '{print NF}' <<< "$MODELS")
+MODEL_HASH=$(printf '%s' "$MODELS" | sha1sum | awk '{print substr($1, 1, 10)}')
+RUN_STAMP=$(date +%Y%m%d_%H%M%S)
+
+# Keep generated filenames short to avoid filesystem limits with large model lists.
+DEFAULT_LOG_FILE="bench_${MODEL_COUNT}m_${MODEL_HASH}_${RUN_STAMP}.bench"
 
 # If a second parameter is passed, use it as the log filename; otherwise, use the default
 LOG_FILE="${2:-$DEFAULT_LOG_FILE}"
 
-echo "🚀 Starting Ollama Benchmark for 5 models..."
+if [[ "$LOG_FILE" == *.bench ]]; then
+    CHART_FILE="${LOG_FILE%.bench}.png"
+else
+    CHART_FILE="${LOG_FILE}.png"
+fi
+
+echo "🚀 Starting Ollama Benchmark for $MODEL_COUNT models..."
 echo "📋 Models:"
 echo "$MODELS" | tr ',' '\n' | sed 's/^/   • /'
 echo "🔢 Epochs: $EPOCHS | Max Tokens: $MAX_TOKENS"
@@ -151,14 +159,13 @@ done
 
 echo ""
 echo "📊 Generating comparison chart..."
-cat "$LOG_FILE" | python3 "$PLOT_SCRIPT"
+cat "$LOG_FILE" | python3 "$PLOT_SCRIPT" -o "$CHART_FILE"
 
 echo "--------------------------------------------------"
 echo "✅ Workflow complete! Raw log data saved to '$LOG_FILE'."
 
 # Create a generic symlink to the latest generated chart for quick viewing
-GENERATED_CHART="${CLEAN_MODELS}.png"
-if [ -f "$GENERATED_CHART" ]; then
-    ln -sf "$GENERATED_CHART" latest_comparison.png
-    echo "🔗 Linked '$GENERATED_CHART' -> 'latest_comparison.png'"
+if [ -f "$CHART_FILE" ]; then
+    ln -sf "$CHART_FILE" latest_comparison.png
+    echo "🔗 Linked '$CHART_FILE' -> 'latest_comparison.png'"
 fi
