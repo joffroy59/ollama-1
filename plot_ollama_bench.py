@@ -1,82 +1,107 @@
 #!/usr/bin/env python3
-import os
+import sys
 import re
 import matplotlib.pyplot as plt
 import numpy as np
 
-def parse_bench_file(filepath):
-    if not os.path.exists(filepath):
-        print(f"❌ Error: The file '{filepath}' was not found.")
+def parse_raw_bench():
+    content = sys.stdin.read()
+    if not content.strip():
+        print("❌ Error: No data received via standard input.")
         return None
 
-    with open(filepath, 'r', encoding='utf-8') as f:
-        lines = [line.strip() for line in f.readlines() if line.strip()]
+    # Track data maps dynamically
+    models = []
+    # Structure: { model_name: { step_name: [list_of_values] } }
+    raw_metrics = {}
 
-    # Find the models from the first header row containing "sec/token"
-    model_names = []
-    for line in lines:
-        if "sec/token" in line:
-            # Extract names surrounding '│' characters
-            parts = [p.strip() for p in line.split("│") if p.strip()]
-            # Filter out the unit column if it slipped in
-            model_names = [p for p in parts if "sec/token" not in p]
-            break
+    current_model = None
 
-    # Fallback to generic names if headers parsing failed
-    if len(model_names) < 2:
-        model_names = ["Model A", "Model B"]
+    for line in content.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+
+        # 1. Capture Model Names from the comment tags
+        if line.startswith("# Model:"):
+            match = re.search(r'# Model:\s*([^\s│|]+)', line)
+            if match:
+                current_model = match.group(1)
+                if current_model not in models:
+                    models.append(current_model)
+                if current_model not in raw_metrics:
+                    raw_metrics[current_model] = {
+                        "prefill_ms": [], "prefill_tps": [],
+                        "generate_ms": [], "generate_tps": [],
+                        "ttft_ms": [], "load_ms": [], "total_ms": []
+                    }
+            continue
+
+        # 2. Extract values from benchmark metrics lines
+        if "BenchmarkModel/name=" in line and current_model:
+            # Parse the step name
+            step_match = re.search(r'step=(\w+)', line)
+            if not step_match:
+                continue
+            step = step_match.group(1)
+
+            # Extract numbers out of trailing metrics
+            parts = line.split()
+
+            if step == "prefill":
+                # parts[-4] is ns/token, parts[-2] is token/sec
+                ns_token = float(parts[-4])
+                tps = float(parts[-2])
+                raw_metrics[current_model]["prefill_ms"].append(ns_token / 1_000_000.0)
+                raw_metrics[current_model]["prefill_tps"].append(tps)
+
+            elif step == "generate":
+                ns_token = float(parts[-4])
+                tps = float(parts[-2])
+                raw_metrics[current_model]["generate_ms"].append(ns_token / 1_000_000.0)
+                raw_metrics[current_model]["generate_tps"].append(tps)
+
+            elif step == "ttft":
+                ns_op = float(parts[-2])
+                raw_metrics[current_model]["ttft_ms"].append(ns_op / 1_000_000.0)
+
+            elif step == "load":
+                ns_op = float(parts[-2])
+                raw_metrics[current_model]["load_ms"].append(ns_op / 1_000_000.0)
+
+            elif step == "total":
+                ns_op = float(parts[-2])
+                raw_metrics[current_model]["total_ms"].append(ns_op / 1_000_000.0)
+
+    if len(models) < 2:
+        print("❌ Error: Could not find at least 2 distinct models to compare.")
+        return None
+
+    # Compute Averages (Mean) for the comparison charts
+    m1, m2 = models[0], models[1]
+
+    # Safely get geomean helper or simple average for step sets
+    def avg(lst): return np.mean(lst) if lst else 0.0
+    def geomean(lst1, lst2): return np.sqrt(avg(lst1) * avg(lst2))
 
     data = {
-        "models": model_names,
-        "sec_token": {"labels": [], "m1": [], "m2": []},
-        "token_sec": {"labels": [], "m1": [], "m2": []},
-        "sec_op":    {"labels": [], "m1": [], "m2": []}
+        "models": [m1, m2],
+        "sec_token": {
+            "labels": ['Prefill', 'Generate', 'Geomean'],
+            "m1": [avg(raw_metrics[m1]["prefill_ms"]), avg(raw_metrics[m1]["generate_ms"]), geomean(raw_metrics[m1]["prefill_ms"], raw_metrics[m1]["generate_ms"])],
+            "m2": [avg(raw_metrics[m2]["prefill_ms"]), avg(raw_metrics[m2]["generate_ms"]), geomean(raw_metrics[m2]["prefill_ms"], raw_metrics[m2]["generate_ms"])]
+        },
+        "token_sec": {
+            "labels": ['Prefill', 'Generate', 'Geomean'],
+            "m1": [avg(raw_metrics[m1]["prefill_tps"]), avg(raw_metrics[m1]["generate_tps"]), geomean(raw_metrics[m1]["prefill_tps"], raw_metrics[m1]["generate_tps"])],
+            "m2": [avg(raw_metrics[m2]["prefill_tps"]), avg(raw_metrics[m2]["generate_tps"]), geomean(raw_metrics[m2]["prefill_tps"], raw_metrics[m2]["generate_tps"])]
+        },
+        "sec_op": {
+            "labels": ['TTFT', 'Load', 'Total', 'Geomean'],
+            "m1": [avg(raw_metrics[m1]["ttft_ms"]), avg(raw_metrics[m1]["load_ms"]), avg(raw_metrics[m1]["total_ms"]), np.cbrt(avg(raw_metrics[m1]["ttft_ms"])*avg(raw_metrics[m1]["load_ms"])*avg(raw_metrics[m1]["total_ms"]))],
+            "m2": [avg(raw_metrics[m2]["ttft_ms"]), avg(raw_metrics[m2]["load_ms"]), avg(raw_metrics[m2]["total_ms"]), np.cbrt(avg(raw_metrics[m2]["ttft_ms"])*avg(raw_metrics[m2]["load_ms"])*avg(raw_metrics[m2]["total_ms"]))]
+        }
     }
-
-    def clean_val(val_str):
-        multiplier = 1.0
-        if 'm' in val_str:
-            val_str = val_str.replace('m', '')
-        elif '.' in val_str and val_str.replace('.','',1).isdigit():
-            multiplier = 1000.0 # Convert total raw seconds to ms
-
-        val_str = val_str.split('±')[0].strip()
-        try:
-            return float(val_str) * multiplier
-        except ValueError:
-            return 0.0
-
-    current_metric = None
-    for line in lines:
-        if "sec/token" in line:
-            current_metric = "sec_token"
-            continue
-        elif "token/sec" in line:
-            current_metric = "token_sec"
-            continue
-        elif "sec/op" in line:
-            current_metric = "sec_op"
-            continue
-
-        if current_metric and ("Model/step=" in line or "geomean" in line):
-            # Split line while preserving structural alignment tokens
-            parts = [p.strip() for p in line.split() if p.strip()]
-            if len(parts) >= 3:
-                label = parts[0].replace("Model/step=", "").capitalize()
-
-                # Separate out the values across ± boundaries safely
-                if "±" in line:
-                    sub_parts = line.split("±")
-                    m1_val = clean_val(sub_parts[0].split()[-1])
-                    m2_val = clean_val(sub_parts[1].split()[-1])
-                else:
-                    m1_val = clean_val(parts[1])
-                    m2_val = clean_val(parts[2])
-
-                data[current_metric]["labels"].append(label)
-                data[current_metric]["m1"].append(m1_val)
-                data[current_metric]["m2"].append(m2_val)
-
     return data
 
 def generate_plot(data):
@@ -84,12 +109,12 @@ def generate_plot(data):
     width = 0.35
     m1_label, m2_label = data["models"][0], data["models"][1]
 
-    # Chart 1: Latency (sec/token)
+    # Chart 1: Latency (ms/token)
     x1 = np.arange(len(data["sec_token"]["labels"]))
     axes[0].bar(x1 - width/2, data["sec_token"]["m1"], width, label=m1_label, color='#1f77b4')
     axes[0].bar(x1 + width/2, data["sec_token"]["m2"], width, label=m2_label, color='#ff7f0e')
     axes[0].set_ylabel('ms / token')
-    axes[0].set_title('Latency (sec/token in ms)\nLower is better')
+    axes[0].set_title('Latency (ms/token)\nLower is better')
     axes[0].set_xticks(x1)
     axes[0].set_xticklabels(data["sec_token"]["labels"])
     axes[0].legend()
@@ -106,12 +131,12 @@ def generate_plot(data):
     axes[1].legend()
     axes[1].grid(axis='y', linestyle='--', alpha=0.7)
 
-    # Chart 3: Operation Latency (sec/op)
+    # Chart 3: Operation Latency (ms/op)
     x3 = np.arange(len(data["sec_op"]["labels"]))
     axes[2].bar(x3 - width/2, data["sec_op"]["m1"], width, label=m1_label, color='#1f77b4')
     axes[2].bar(x3 + width/2, data["sec_op"]["m2"], width, label=m2_label, color='#ff7f0e')
     axes[2].set_ylabel('ms / op')
-    axes[2].set_title('Operation Latency (sec/op in ms)\nLower is better')
+    axes[2].set_title('Operation Latency (ms/op)\nLower is better')
     axes[2].set_xticks(x3)
     axes[2].set_xticklabels(data["sec_op"]["labels"])
     axes[2].legend()
@@ -120,10 +145,10 @@ def generate_plot(data):
     plt.tight_layout()
     output_png = 'ollama_benchmark_comparison.png'
     plt.savefig(output_png, dpi=300)
-    print(f"📊 Chart successfully updated for {m1_label} vs {m2_label}!")
-    print(f"📁 Saved as '{output_png}'")
+    print(f"📊 Chart successfully generated for {m1_label} vs {m2_label}!")
+    print(f"📁 Saved plot to disk as '{output_png}'")
 
 if __name__ == "__main__":
-    bench_data = parse_bench_file('gemma.bench')
+    bench_data = parse_raw_bench()
     if bench_data:
         generate_plot(bench_data)
