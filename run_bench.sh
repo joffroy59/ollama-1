@@ -42,6 +42,20 @@ else
 fi
 
 # Execute benchmark, save logs, and plot dynamically via stdin
+# Convert comma-separated models to array
+IFS=',' read -ra MODEL_ARRAY <<< "$MODELS"
+TOTAL_MODELS=${#MODEL_ARRAY[@]}
+CURRENT=0
+
+for MODEL in "${MODEL_ARRAY[@]}"; do
+    CURRENT=$((CURRENT + 1))
+    PROGRESS="[$CURRENT/$TOTAL_MODELS]"
+    echo ""
+    echo "⏳ $PROGRESS Benchmarking: $MODEL"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+done
+
+echo ""
 ./ollama-bench -model "$MODELS" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" \
     | tee "$LOG_FILE" \
     | python3 "$PLOT_SCRIPT"
