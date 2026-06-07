@@ -14,7 +14,7 @@ if [ -n "$1" ]; then
     MODELS="$1"
 else
     # Prompt user for models if not provided
-    read -p "📋 Enter models to benchmark (default: gemma4): " MODELS
+    read -p "📋 Enter models to benchmark (comma-separated, default: gemma4): " MODELS
     MODELS="${MODELS:-gemma4}"
 fi
 
