@@ -8,6 +8,7 @@ EPOCHS=6
 MAX_TOKENS=100
 PROMPT="Write me a short story"
 PLOT_SCRIPT="plot_ollama_bench.py"
+REPORT_DIR="cmd/bench/report"
 
 # Handle MODELS parameter
 if [ -n "$1" ]; then
@@ -24,7 +25,7 @@ CLEAN_MODELS=$(echo "$MODELS" | sed 's/[:]/_/g' | sed 's/,/_vs_/g')
 DEFAULT_LOG_FILE="${CLEAN_MODELS}.bench"
 
 # If a second parameter is passed, use it as the log filename; otherwise, use the default
-LOG_FILE="${2:-$DEFAULT_LOG_FILE}"
+LOG_FILE="${REPORT_DIR}/${2:-$DEFAULT_LOG_FILE}"
 
 echo "🚀 Starting Ollama Benchmark for 5 models..."
 echo "📋 Models:"
@@ -118,6 +119,7 @@ run_with_progress_bar() {
 }
 
 # Clear log file
+mkdir -p "$REPORT_DIR"
 > "$LOG_FILE"
 draw_progress_bar 0 "$TOTAL_MODELS" "Starting"
 echo ""
