@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import re
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,11 +11,9 @@ def parse_raw_bench():
         print("❌ Error: No data received via standard input.")
         return None
 
-    # Track data maps dynamically
     models = []
     # Structure: { model_name: { step_name: [list_of_values] } }
     raw_metrics = {}
-
     current_model = None
 
     for line in content.split('\n'):
@@ -39,17 +38,13 @@ def parse_raw_bench():
 
         # 2. Extract values from benchmark metrics lines
         if "BenchmarkModel/name=" in line and current_model:
-            # Parse the step name
             step_match = re.search(r'step=(\w+)', line)
             if not step_match:
                 continue
             step = step_match.group(1)
-
-            # Extract numbers out of trailing metrics
             parts = line.split()
 
             if step == "prefill":
-                # parts[-4] is ns/token, parts[-2] is token/sec
                 ns_token = float(parts[-4])
                 tps = float(parts[-2])
                 raw_metrics[current_model]["prefill_ms"].append(ns_token / 1_000_000.0)
@@ -77,10 +72,8 @@ def parse_raw_bench():
         print("❌ Error: Could not find at least 2 distinct models to compare.")
         return None
 
-    # Compute Averages (Mean) for the comparison charts
     m1, m2 = models[0], models[1]
 
-    # Safely get geomean helper or simple average for step sets
     def avg(lst): return np.mean(lst) if lst else 0.0
     def geomean(lst1, lst2): return np.sqrt(avg(lst1) * avg(lst2))
 
@@ -104,7 +97,7 @@ def parse_raw_bench():
     }
     return data
 
-def generate_plot(data):
+def generate_plot(data, output_filename=None):
     fig, axes = plt.subplots(1, 3, figsize=(18, 6))
     width = 0.35
     m1_label, m2_label = data["models"][0], data["models"][1]
@@ -143,12 +136,23 @@ def generate_plot(data):
     axes[2].grid(axis='y', linestyle='--', alpha=0.7)
 
     plt.tight_layout()
-    output_png = 'ollama_benchmark_comparison.png'
-    plt.savefig(output_png, dpi=300)
+
+    # Determine filename if not set by argument flag
+    if not output_filename:
+        # Sanitize names (e.g., 'gemma3:12b' -> 'gemma3_12b')
+        clean_m1 = re.sub(r'[^a-zA-Z0-9_-]', '_', m1_label)
+        clean_m2 = re.sub(r'[^a-zA-Z0-9_-]', '_', m2_label)
+        output_filename = f"{clean_m1}_vs_{clean_m2}.png"
+
+    plt.savefig(output_filename, dpi=300)
     print(f"📊 Chart successfully generated for {m1_label} vs {m2_label}!")
-    print(f"📁 Saved plot to disk as '{output_png}'")
+    print(f"📁 Saved plot to disk as '{output_filename}'")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate benchmark comparison charts from ollama-bench output.")
+    parser.add_argument('-o', '--output', type=str, help="Custom path/name for the output PNG image file.")
+    args = parser.parse_args()
+
     bench_data = parse_raw_bench()
     if bench_data:
-        generate_plot(bench_data)
+        generate_plot(bench_data, output_filename=args.output)
