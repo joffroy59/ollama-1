@@ -68,38 +68,27 @@ run_with_progress_bar() {
     local completed="$2"
     local total="$3"
     local model="$4"
-    local i=0
-    local start
-    local end
-    local slot
-    local pos
     local percent
-    local bar
+    local filled
+    local empty
+    local done_bar
+    local todo_bar
+    local started_at
+    local now
+    local elapsed
+
+    started_at=$(date +%s)
 
     while kill -0 "$pid" 2>/dev/null; do
-        start=$(( completed * BAR_WIDTH / total ))
-        end=$(( (completed + 1) * BAR_WIDTH / total ))
-        slot=$(( end - start ))
-        if [ "$slot" -lt 1 ]; then
-            slot=1
-        fi
-
-        pos=$(( i % slot ))
         percent=$(( completed * 100 / total ))
-        bar=""
+        filled=$(( completed * BAR_WIDTH / total ))
+        empty=$(( BAR_WIDTH - filled ))
+        done_bar=$(printf '%*s' "$filled" '' | tr ' ' '#')
+        todo_bar=$(printf '%*s' "$empty" '' | tr ' ' '-')
+        now=$(date +%s)
+        elapsed=$(( now - started_at ))
 
-        for ((j = 0; j < BAR_WIDTH; j++)); do
-            if [ "$j" -lt "$start" ]; then
-                bar+="#"
-            elif [ "$j" -eq $((start + pos)) ]; then
-                bar+=">"
-            else
-                bar+="-"
-            fi
-        done
-
-        printf "\r[%s] %3d%% (%d/%d) Running: %s" "$bar" "$percent" "$completed" "$total" "$model"
-        i=$((i + 1))
+        printf "\r[%s%s] %3d%% (%d/%d) Running: %s (%ss)" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$model" "$elapsed"
         sleep 0.1
     done
 
