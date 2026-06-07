@@ -74,7 +74,7 @@ run_with_progress_bar() {
     local percent
     local base_filled
     local next_filled
-    local slot
+    local max_running_filled
     local running_filled
     local filled
     local empty
@@ -85,19 +85,20 @@ run_with_progress_bar() {
     local elapsed
 
     started_at=$(date +%s)
+    base_filled=$(( completed * BAR_WIDTH / total ))
+    next_filled=$(( (completed + 1) * BAR_WIDTH / total ))
+    running_filled="$base_filled"
+    max_running_filled="$next_filled"
+
+    # Keep the last cell for the final completed state when possible.
+    if [ "$next_filled" -gt "$base_filled" ]; then
+        max_running_filled=$((next_filled - 1))
+    fi
 
     while kill -0 "$pid" 2>/dev/null; do
         spin_char="${spin:$((i % 4)):1}"
-        base_filled=$(( completed * BAR_WIDTH / total ))
-        next_filled=$(( (completed + 1) * BAR_WIDTH / total ))
-        slot=$(( next_filled - base_filled ))
-        if [ "$slot" -lt 1 ]; then
-            slot=1
-        fi
-
-        running_filled=$(( base_filled + (i % (slot + 1)) ))
-        if [ "$running_filled" -gt "$next_filled" ]; then
-            running_filled="$next_filled"
+        if [ $((i % 5)) -eq 0 ] && [ "$running_filled" -lt "$max_running_filled" ]; then
+            running_filled=$((running_filled + 1))
         fi
 
         filled="$running_filled"
