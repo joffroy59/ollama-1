@@ -14,7 +14,7 @@ if [ -n "$1" ]; then
     MODELS="$1"
 else
     # Prompt user for models if not provided
-    read -p "📋 Enter models to benchmark (default: gemma4): " MODELS
+    read -p "📋 Enter models to benchmark (comma-separated, default: gemma4): " MODELS
     MODELS="${MODELS:-gemma4}"
 fi
 
@@ -41,10 +41,117 @@ else
     exit 1
 fi
 
-# Execute benchmark, save logs, and plot dynamically via stdin
-./ollama-bench -model "$MODELS" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" \
-    | tee "$LOG_FILE" \
-    | python3 "$PLOT_SCRIPT"
+# Execute benchmark with synchronized trace and progress
+# Convert comma-separated models to array
+IFS=',' read -ra MODEL_ARRAY <<< "$MODELS"
+TOTAL_MODELS=${#MODEL_ARRAY[@]}
+CURRENT=0
+BAR_WIDTH=40
+
+draw_progress_bar() {
+    local completed="$1"
+    local total="$2"
+    local label="$3"
+    local filled=$(( completed * BAR_WIDTH / total ))
+    local empty=$(( BAR_WIDTH - filled ))
+    local percent=$(( completed * 100 / total ))
+    local done_bar
+    local todo_bar
+
+    done_bar=$(printf '%*s' "$filled" '' | tr ' ' '#')
+    todo_bar=$(printf '%*s' "$empty" '' | tr ' ' '-')
+    printf "\r[%s%s] %3d%% (%d/%d) %s" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$label"
+}
+
+run_with_progress_bar() {
+    local pid="$1"
+    local completed="$2"
+    local total="$3"
+    local model="$4"
+    local spin='|/-\\'
+    local i=0
+    local spin_char
+    local percent
+    local base_filled
+    local next_filled
+    local max_running_filled
+    local running_filled
+    local filled
+    local empty
+    local done_bar
+    local todo_bar
+    local started_at
+    local now
+    local elapsed
+
+    started_at=$(date +%s)
+    base_filled=$(( completed * BAR_WIDTH / total ))
+    next_filled=$(( (completed + 1) * BAR_WIDTH / total ))
+    running_filled="$base_filled"
+    max_running_filled="$next_filled"
+
+    # Keep the last cell for the final completed state when possible.
+    if [ "$next_filled" -gt "$base_filled" ]; then
+        max_running_filled=$((next_filled - 1))
+    fi
+
+    while kill -0 "$pid" 2>/dev/null; do
+        spin_char="${spin:$((i % 4)):1}"
+        if [ $((i % 5)) -eq 0 ] && [ "$running_filled" -lt "$max_running_filled" ]; then
+            running_filled=$((running_filled + 1))
+        fi
+
+        filled="$running_filled"
+        empty=$(( BAR_WIDTH - filled ))
+        percent=$(( filled * 100 / BAR_WIDTH ))
+        done_bar=$(printf '%*s' "$filled" '' | tr ' ' '#')
+        todo_bar=$(printf '%*s' "$empty" '' | tr ' ' '-')
+        now=$(date +%s)
+        elapsed=$(( now - started_at ))
+
+        printf "\r%s [%s%s] %3d%% (%d/%d) Running: %s (%ss)" "$spin_char" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$model" "$elapsed"
+        i=$((i + 1))
+        sleep 0.1
+    done
+
+    printf "\r"
+}
+
+# Clear log file
+> "$LOG_FILE"
+draw_progress_bar 0 "$TOTAL_MODELS" "Starting"
+echo ""
+
+for MODEL in "${MODEL_ARRAY[@]}"; do
+    CURRENT=$((CURRENT + 1))
+    MODEL_LOG=$(mktemp)
+
+    echo ""
+    echo "⏳ [$CURRENT/$TOTAL_MODELS] Benchmarking: $MODEL"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    ./ollama-bench -model "$MODEL" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" > "$MODEL_LOG" 2>&1 &
+    BENCH_PID=$!
+    run_with_progress_bar "$BENCH_PID" "$((CURRENT - 1))" "$TOTAL_MODELS" "$MODEL"
+
+    if ! wait "$BENCH_PID"; then
+        cat "$MODEL_LOG" >> "$LOG_FILE"
+        rm -f "$MODEL_LOG"
+        echo ""
+        echo "❌ Failed: $MODEL"
+        exit 1
+    fi
+
+    cat "$MODEL_LOG" >> "$LOG_FILE"
+    rm -f "$MODEL_LOG"
+    draw_progress_bar "$CURRENT" "$TOTAL_MODELS" "Completed: $MODEL"
+    echo ""
+    echo "✅ Completed: $MODEL"
+done
+
+echo ""
+echo "📊 Generating comparison chart..."
+cat "$LOG_FILE" | python3 "$PLOT_SCRIPT"
 
 echo "--------------------------------------------------"
 echo "✅ Workflow complete! Raw log data saved to '$LOG_FILE'."
