@@ -4,19 +4,27 @@
 set -e
 
 # Configuration
-MODELS="gemma3:12b,gemma4,gemma4:e2b,gemma4:e4b,gemma3n:latest"
 EPOCHS=6
 MAX_TOKENS=100
 PROMPT="Write me a short story"
 PLOT_SCRIPT="plot_ollama_bench.py"
+
+# Handle MODELS parameter
+if [ -n "$1" ]; then
+    MODELS="$1"
+else
+    # Prompt user for models if not provided
+    read -p "📋 Enter models to benchmark (default: gemma4): " MODELS
+    MODELS="${MODELS:-gemma4}"
+fi
 
 # Generate a clean default bench filename based on the models string
 # Replaces colons and commas with underscores
 CLEAN_MODELS=$(echo "$MODELS" | sed 's/[:]/_/g' | sed 's/,/_vs_/g')
 DEFAULT_LOG_FILE="${CLEAN_MODELS}.bench"
 
-# If a parameter is passed, use it as the log filename; otherwise, use the default
-LOG_FILE="${1:-$DEFAULT_LOG_FILE}"
+# If a second parameter is passed, use it as the log filename; otherwise, use the default
+LOG_FILE="${2:-$DEFAULT_LOG_FILE}"
 
 echo "🚀 Starting Ollama Benchmark for 5 models..."
 echo "📋 Models:"
