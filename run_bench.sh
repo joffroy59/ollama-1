@@ -62,7 +62,7 @@ done
 
 echo ""
 echo "📊 Generating comparison chart..."
-python3 "$PLOT_SCRIPT" "$LOG_FILE"
+cat "$LOG_FILE" | python3 "$PLOT_SCRIPT"
 
 echo "--------------------------------------------------"
 echo "✅ Workflow complete! Raw log data saved to '$LOG_FILE'."
