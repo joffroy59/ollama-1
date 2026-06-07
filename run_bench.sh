@@ -46,16 +46,60 @@ fi
 IFS=',' read -ra MODEL_ARRAY <<< "$MODELS"
 TOTAL_MODELS=${#MODEL_ARRAY[@]}
 CURRENT=0
+BAR_WIDTH=40
 
-run_with_spinner() {
+draw_progress_bar() {
+    local completed="$1"
+    local total="$2"
+    local label="$3"
+    local filled=$(( completed * BAR_WIDTH / total ))
+    local empty=$(( BAR_WIDTH - filled ))
+    local percent=$(( completed * 100 / total ))
+    local done_bar
+    local todo_bar
+
+    done_bar=$(printf '%*s' "$filled" '' | tr ' ' '#')
+    todo_bar=$(printf '%*s' "$empty" '' | tr ' ' '-')
+    printf "\r[%s%s] %3d%% (%d/%d) %s" "$done_bar" "$todo_bar" "$percent" "$completed" "$total" "$label"
+}
+
+run_with_progress_bar() {
     local pid="$1"
-    local label="$2"
-    local spin='|/-\\'
+    local completed="$2"
+    local total="$3"
+    local model="$4"
     local i=0
+    local start
+    local end
+    local slot
+    local pos
+    local percent
+    local bar
 
     while kill -0 "$pid" 2>/dev/null; do
-        i=$(( (i + 1) % 4 ))
-        printf "\r%s %s" "${spin:$i:1}" "$label"
+        start=$(( completed * BAR_WIDTH / total ))
+        end=$(( (completed + 1) * BAR_WIDTH / total ))
+        slot=$(( end - start ))
+        if [ "$slot" -lt 1 ]; then
+            slot=1
+        fi
+
+        pos=$(( i % slot ))
+        percent=$(( completed * 100 / total ))
+        bar=""
+
+        for ((j = 0; j < BAR_WIDTH; j++)); do
+            if [ "$j" -lt "$start" ]; then
+                bar+="#"
+            elif [ "$j" -eq $((start + pos)) ]; then
+                bar+=">"
+            else
+                bar+="-"
+            fi
+        done
+
+        printf "\r[%s] %3d%% (%d/%d) Running: %s" "$bar" "$percent" "$completed" "$total" "$model"
+        i=$((i + 1))
         sleep 0.1
     done
 
@@ -64,29 +108,33 @@ run_with_spinner() {
 
 # Clear log file
 > "$LOG_FILE"
+draw_progress_bar 0 "$TOTAL_MODELS" "Starting"
+echo ""
 
 for MODEL in "${MODEL_ARRAY[@]}"; do
     CURRENT=$((CURRENT + 1))
-    PROGRESS="[$CURRENT/$TOTAL_MODELS]"
     MODEL_LOG=$(mktemp)
 
     echo ""
-    echo "⏳ $PROGRESS Benchmarking: $MODEL"
+    echo "⏳ [$CURRENT/$TOTAL_MODELS] Benchmarking: $MODEL"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
     ./ollama-bench -model "$MODEL" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" > "$MODEL_LOG" 2>&1 &
     BENCH_PID=$!
-    run_with_spinner "$BENCH_PID" "$PROGRESS Running $MODEL"
+    run_with_progress_bar "$BENCH_PID" "$((CURRENT - 1))" "$TOTAL_MODELS" "$MODEL"
 
     if ! wait "$BENCH_PID"; then
         cat "$MODEL_LOG" >> "$LOG_FILE"
         rm -f "$MODEL_LOG"
+        echo ""
         echo "❌ Failed: $MODEL"
         exit 1
     fi
 
     cat "$MODEL_LOG" >> "$LOG_FILE"
     rm -f "$MODEL_LOG"
+    draw_progress_bar "$CURRENT" "$TOTAL_MODELS" "Completed: $MODEL"
+    echo ""
     echo "✅ Completed: $MODEL"
 done
 
