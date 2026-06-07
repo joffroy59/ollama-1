@@ -41,11 +41,14 @@ else
     exit 1
 fi
 
-# Execute benchmark, save logs, and plot dynamically via stdin
+# Execute benchmark with synchronized trace and progress
 # Convert comma-separated models to array
 IFS=',' read -ra MODEL_ARRAY <<< "$MODELS"
 TOTAL_MODELS=${#MODEL_ARRAY[@]}
 CURRENT=0
+
+# Clear log file
+> "$LOG_FILE"
 
 for MODEL in "${MODEL_ARRAY[@]}"; do
     CURRENT=$((CURRENT + 1))
@@ -53,12 +56,13 @@ for MODEL in "${MODEL_ARRAY[@]}"; do
     echo ""
     echo "⏳ $PROGRESS Benchmarking: $MODEL"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    ./ollama-bench -model "$MODEL" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" >> "$LOG_FILE"
+    echo "✅ Completed: $MODEL"
 done
 
 echo ""
-./ollama-bench -model "$MODELS" -epochs "$EPOCHS" -max-tokens "$MAX_TOKENS" -p "$PROMPT" \
-    | tee "$LOG_FILE" \
-    | python3 "$PLOT_SCRIPT"
+echo "📊 Generating comparison chart..."
+python3 "$PLOT_SCRIPT" "$LOG_FILE"
 
 echo "--------------------------------------------------"
 echo "✅ Workflow complete! Raw log data saved to '$LOG_FILE'."
