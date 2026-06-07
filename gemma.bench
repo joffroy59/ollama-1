@@ -1,0 +1,62 @@
+# Model: gemma3:12b | Params: 12.2B | Quant: Q4_K_M | Family: gemma3 | Size: 8044769443 | VRAM: 8044769443 | NumCtx: 4096
+BenchmarkModel/name=gemma3:12b/step=prefill 1 5109444.44 ns/token 195.72 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 19203260.00 ns/token 52.07 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 462275938 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 396954400 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2382418700 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4953777.78 ns/token 201.87 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18850150.00 ns/token 53.05 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 502412382 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 438904300 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2384978100 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4958888.89 ns/token 201.66 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 19225520.00 ns/token 52.01 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 503673001 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 442275100 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2424803200 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4934888.89 ns/token 202.64 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18829020.00 ns/token 53.11 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 552351301 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 487468300 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2431338300 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4945000.00 ns/token 202.22 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 19227560.00 ns/token 52.01 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 526318177 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 463578500 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2447865000 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4894777.78 ns/token 204.30 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18896800.00 ns/token 52.92 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 529942929 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 468676800 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2418590900 ns/op
+# Model: gemma4 | Params: 8.0B | Quant: Q4_K_M | Family: gemma4 | Size: 3281644419 | VRAM: 3281644419 | NumCtx: 4096
+BenchmarkModel/name=gemma4/step=prefill 1 2950000.00 ns/token 338.98 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9987290.00 ns/token 100.13 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 427607177 ns/op
+BenchmarkModel/name=gemma4/step=load 1 395633000 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1425960900 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2923222.22 ns/token 342.09 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9654900.00 ns/token 103.57 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 537562946 ns/op
+BenchmarkModel/name=gemma4/step=load 1 506063700 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1502603300 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2845444.44 ns/token 351.44 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9645900.00 ns/token 103.67 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 480060513 ns/op
+BenchmarkModel/name=gemma4/step=load 1 448488000 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1442684500 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2827000.00 ns/token 353.73 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9677000.00 ns/token 103.34 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 463624360 ns/op
+BenchmarkModel/name=gemma4/step=load 1 432214400 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1430340300 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 3108000.00 ns/token 321.75 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9769790.00 ns/token 102.36 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 510686778 ns/op
+BenchmarkModel/name=gemma4/step=load 1 476172500 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1486465000 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2888000.00 ns/token 346.26 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9668600.00 ns/token 103.43 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 453071756 ns/op
+BenchmarkModel/name=gemma4/step=load 1 420422100 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1418198700 ns/op
