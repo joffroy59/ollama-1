@@ -19,7 +19,8 @@ DEFAULT_LOG_FILE="${CLEAN_MODELS}.bench"
 LOG_FILE="${1:-$DEFAULT_LOG_FILE}"
 
 echo "🚀 Starting Ollama Benchmark for 5 models..."
-echo "📋 Models: $MODELS"
+echo "📋 Models:"
+echo "$MODELS" | tr ',' '\n' | sed 's/^/   • /'
 echo "🔢 Epochs: $EPOCHS | Max Tokens: $MAX_TOKENS"
 echo "📁 Output Log File: $LOG_FILE"
 echo "--------------------------------------------------"
