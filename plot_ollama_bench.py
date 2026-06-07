@@ -68,89 +68,102 @@ def parse_raw_bench():
                 ns_op = float(parts[-2])
                 raw_metrics[current_model]["total_ms"].append(ns_op / 1_000_000.0)
 
-    if len(models) < 2:
-        print("❌ Error: Could not find at least 2 distinct models to compare.")
+    if not models:
+        print("❌ Error: Could not find any valid models in the stream.")
         return None
-
-    m1, m2 = models[0], models[1]
 
     def avg(lst): return np.mean(lst) if lst else 0.0
     def geomean(lst1, lst2): return np.sqrt(avg(lst1) * avg(lst2))
 
-    data = {
-        "models": [m1, m2],
-        "sec_token": {
-            "labels": ['Prefill', 'Generate', 'Geomean'],
-            "m1": [avg(raw_metrics[m1]["prefill_ms"]), avg(raw_metrics[m1]["generate_ms"]), geomean(raw_metrics[m1]["prefill_ms"], raw_metrics[m1]["generate_ms"])],
-            "m2": [avg(raw_metrics[m2]["prefill_ms"]), avg(raw_metrics[m2]["generate_ms"]), geomean(raw_metrics[m2]["prefill_ms"], raw_metrics[m2]["generate_ms"])]
-        },
-        "token_sec": {
-            "labels": ['Prefill', 'Generate', 'Geomean'],
-            "m1": [avg(raw_metrics[m1]["prefill_tps"]), avg(raw_metrics[m1]["generate_tps"]), geomean(raw_metrics[m1]["prefill_tps"], raw_metrics[m1]["generate_tps"])],
-            "m2": [avg(raw_metrics[m2]["prefill_tps"]), avg(raw_metrics[m2]["generate_tps"]), geomean(raw_metrics[m2]["prefill_tps"], raw_metrics[m2]["generate_tps"])]
-        },
-        "sec_op": {
-            "labels": ['TTFT', 'Load', 'Total', 'Geomean'],
-            "m1": [avg(raw_metrics[m1]["ttft_ms"]), avg(raw_metrics[m1]["load_ms"]), avg(raw_metrics[m1]["total_ms"]), np.cbrt(avg(raw_metrics[m1]["ttft_ms"])*avg(raw_metrics[m1]["load_ms"])*avg(raw_metrics[m1]["total_ms"]))],
-            "m2": [avg(raw_metrics[m2]["ttft_ms"]), avg(raw_metrics[m2]["load_ms"]), avg(raw_metrics[m2]["total_ms"]), np.cbrt(avg(raw_metrics[m2]["ttft_ms"])*avg(raw_metrics[m2]["load_ms"])*avg(raw_metrics[m2]["total_ms"]))]
-        }
+    # Compile dataset dynamically for every model detected
+    processed_data = {
+        "models": models,
+        "labels_token": ['Prefill', 'Generate', 'Geomean'],
+        "labels_op": ['TTFT', 'Load', 'Total', 'Geomean'],
+        "metrics": {}
     }
-    return data
+
+    for model in models:
+        p_ms = avg(raw_metrics[model]["prefill_ms"])
+        g_ms = avg(raw_metrics[model]["generate_ms"])
+
+        p_tps = avg(raw_metrics[model]["prefill_tps"])
+        g_tps = avg(raw_metrics[model]["generate_tps"])
+
+        t_ms = avg(raw_metrics[model]["ttft_ms"])
+        l_ms = avg(raw_metrics[model]["load_ms"])
+        tot_ms = avg(raw_metrics[model]["total_ms"])
+
+        processed_data["metrics"][model] = {
+            "sec_token": [p_ms, g_ms, np.sqrt(p_ms * g_ms)],
+            "token_sec": [p_tps, g_tps, np.sqrt(p_tps * g_tps)],
+            "sec_op": [t_ms, l_ms, tot_ms, np.cbrt(t_ms * l_ms * tot_ms)]
+        }
+
+    return processed_data
 
 def generate_plot(data, output_filename=None):
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-    width = 0.35
-    m1_label, m2_label = data["models"][0], data["models"][1]
+    fig, axes = plt.subplots(1, 3, figsize=(20, 7))
+    models = data["models"]
+    num_models = len(models)
 
-    # Chart 1: Latency (ms/token)
-    x1 = np.arange(len(data["sec_token"]["labels"]))
-    axes[0].bar(x1 - width/2, data["sec_token"]["m1"], width, label=m1_label, color='#1f77b4')
-    axes[0].bar(x1 + width/2, data["sec_token"]["m2"], width, label=m2_label, color='#ff7f0e')
-    axes[0].set_ylabel('ms / token')
-    axes[0].set_title('Latency (ms/token)\nLower is better')
-    axes[0].set_xticks(x1)
-    axes[0].set_xticklabels(data["sec_token"]["labels"])
-    axes[0].legend()
-    axes[0].grid(axis='y', linestyle='--', alpha=0.7)
+    # Dynamically scale bar widths to fit gracefully
+    total_width = 0.8
+    bar_width = total_width / num_models
 
-    # Chart 2: Throughput (token/sec)
-    x2 = np.arange(len(data["token_sec"]["labels"]))
-    axes[1].bar(x2 - width/2, data["token_sec"]["m1"], width, label=m1_label, color='#1f77b4')
-    axes[1].bar(x2 + width/2, data["token_sec"]["m2"], width, label=m2_label, color='#ff7f0e')
-    axes[1].set_ylabel('tokens / sec')
-    axes[1].set_title('Throughput (token/sec)\nHigher is better')
-    axes[1].set_xticks(x2)
-    axes[1].set_xticklabels(data["token_sec"]["labels"])
-    axes[1].legend()
-    axes[1].grid(axis='y', linestyle='--', alpha=0.7)
+    # Use a standard qualitative color palette
+    colors = plt.cm.tab10(np.linspace(0, 1, 10))
 
-    # Chart 3: Operation Latency (ms/op)
-    x3 = np.arange(len(data["sec_op"]["labels"]))
-    axes[2].bar(x3 - width/2, data["sec_op"]["m1"], width, label=m1_label, color='#1f77b4')
-    axes[2].bar(x3 + width/2, data["sec_op"]["m2"], width, label=m2_label, color='#ff7f0e')
-    axes[2].set_ylabel('ms / op')
-    axes[2].set_title('Operation Latency (ms/op)\nLower is better')
-    axes[2].set_xticks(x3)
-    axes[2].set_xticklabels(data["sec_op"]["labels"])
-    axes[2].legend()
-    axes[2].grid(axis='y', linestyle='--', alpha=0.7)
+    # Helper plotting loop for the 3 subplots
+    metrics_keys = ["sec_token", "token_sec", "sec_op"]
+    titles = [
+        'Latency (ms/token)\nLower is better',
+        'Throughput (token/sec)\nHigher is better',
+        'Operation Latency (ms/op)\nLower is better'
+    ]
+    y_labels = ['ms / token', 'tokens / sec', 'ms / op']
+
+    for i, key in enumerate(metrics_keys):
+        labels = data["labels_op"] if key == "sec_op" else data["labels_token"]
+        x_indexes = np.arange(len(labels))
+
+        # Plot bars for each model side-by-side
+        for idx, model in enumerate(models):
+            # Calculate offset shift per model relative to group center
+            offset = (idx - (num_models - 1) / 2) * bar_width
+            axes[i].bar(
+                x_indexes + offset,
+                data["metrics"][model][key],
+                bar_width,
+                label=model,
+                color=colors[idx % 10]
+            )
+
+        axes[i].set_ylabel(y_labels[i])
+        axes[i].set_title(titles[i], fontsize=12, fontweight='bold')
+        axes[i].set_xticks(x_indexes)
+        axes[i].set_xticklabels(labels)
+        axes[i].grid(axis='y', linestyle='--', alpha=0.5)
+        if i == 0:  # Put the legend on the first chart
+            axes[i].legend(loc='upper left')
 
     plt.tight_layout()
 
-    # Determine filename if not set by argument flag
+    # Determine fallback filename dynamically from all models tested
     if not output_filename:
-        # Sanitize names (e.g., 'gemma3:12b' -> 'gemma3_12b')
-        clean_m1 = re.sub(r'[^a-zA-Z0-9_-]', '_', m1_label)
-        clean_m2 = re.sub(r'[^a-zA-Z0-9_-]', '_', m2_label)
-        output_filename = f"{clean_m1}_vs_{clean_m2}.png"
+        sanitized_names = [re.sub(r'[^a-zA-Z0-9_-]', '_', m) for m in models]
+        output_filename = f"{'_vs_'.join(sanitized_names)}.png"
+        # Truncate filename if it gets crazily long
+        if len(output_filename) > 120:
+            output_filename = "ollama_multi_model_comparison.png"
 
     plt.savefig(output_filename, dpi=300)
-    print(f"📊 Chart successfully generated for {m1_label} vs {m2_label}!")
+    print(f"📊 Chart successfully generated for: {', '.join(models)}")
     print(f"📁 Saved plot to disk as '{output_filename}'")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate benchmark comparison charts from ollama-bench output.")
-    parser.add_argument('-o', '--output', type=str, help="Custom path/name for the output PNG image file.")
+    parser = argparse.ArgumentParser(description="Generate dynamic multi-model benchmark charts.")
+    parser.add_argument('-o', '--output', type=str, help="Custom filename for the output PNG image.")
     args = parser.parse_args()
 
     bench_data = parse_raw_bench()
