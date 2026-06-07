@@ -1,0 +1,372 @@
+# Model: gemma3 | Params: 4.3B | Quant: Q4_K_M | Family: gemma3 | Size: 2875520450 | VRAM: 2875520450 | NumCtx: 4096
+BenchmarkModel/name=gemma3/step=prefill 1 2456777.78 ns/token 407.04 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 7984660.00 ns/token 125.24 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 491828466 ns/op
+BenchmarkModel/name=gemma3/step=load 1 461355000 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1289705100 ns/op
+BenchmarkModel/name=gemma3/step=prefill 1 2283666.67 ns/token 437.89 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 7970800.00 ns/token 125.46 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 546677877 ns/op
+BenchmarkModel/name=gemma3/step=load 1 514649000 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1341473800 ns/op
+BenchmarkModel/name=gemma3/step=prefill 1 2291888.89 ns/token 436.32 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 8003340.00 ns/token 124.95 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 472635731 ns/op
+BenchmarkModel/name=gemma3/step=load 1 443126400 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1271653900 ns/op
+BenchmarkModel/name=gemma3/step=prefill 1 2285000.00 ns/token 437.64 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 7978320.00 ns/token 125.34 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 576237708 ns/op
+BenchmarkModel/name=gemma3/step=load 1 544234900 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1370635900 ns/op
+BenchmarkModel/name=gemma3/step=prefill 1 2276555.56 ns/token 439.26 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 7970700.00 ns/token 125.46 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 541358311 ns/op
+BenchmarkModel/name=gemma3/step=load 1 511520800 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1336547900 ns/op
+BenchmarkModel/name=gemma3/step=prefill 1 2284888.89 ns/token 437.66 token/sec
+BenchmarkModel/name=gemma3/step=generate 1 7970690.00 ns/token 125.46 token/sec
+BenchmarkModel/name=gemma3/step=ttft 1 467172536 ns/op
+BenchmarkModel/name=gemma3/step=load 1 437842500 ns/op
+BenchmarkModel/name=gemma3/step=total 1 1262380200 ns/op
+# Model: gemma3n | Params: 6.9B | Quant: Q4_K_M | Family: gemma3n | Size: 3029315091 | VRAM: 3029315091 | NumCtx: 4096
+BenchmarkModel/name=gemma3n/step=prefill 1 3580666.67 ns/token 279.28 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 10543620.00 ns/token 94.84 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 485583045 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 447258300 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1538138100 ns/op
+BenchmarkModel/name=gemma3n/step=prefill 1 3537888.89 ns/token 282.65 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 10566410.00 ns/token 94.64 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 498619791 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 462662400 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1554830500 ns/op
+BenchmarkModel/name=gemma3n/step=prefill 1 3553444.44 ns/token 281.42 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 10561800.00 ns/token 94.68 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 500224291 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 462318700 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1554886100 ns/op
+BenchmarkModel/name=gemma3n/step=prefill 1 3642444.33 ns/token 274.54 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 10536060.00 ns/token 94.91 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 501266404 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 461553700 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1552722400 ns/op
+BenchmarkModel/name=gemma3n/step=prefill 1 3497111.11 ns/token 285.95 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 10553679.99 ns/token 94.75 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 486730278 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 449712400 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1541408000 ns/op
+BenchmarkModel/name=gemma3n/step=prefill 1 3729000.00 ns/token 268.17 token/sec
+BenchmarkModel/name=gemma3n/step=generate 1 11372460.00 ns/token 87.93 token/sec
+BenchmarkModel/name=gemma3n/step=ttft 1 473227221 ns/op
+BenchmarkModel/name=gemma3n/step=load 1 434941400 ns/op
+BenchmarkModel/name=gemma3n/step=total 1 1609393700 ns/op
+# Model: gemma3:12b | Params: 12.2B | Quant: Q4_K_M | Family: gemma3 | Size: 8044769443 | VRAM: 8044769443 | NumCtx: 4096
+BenchmarkModel/name=gemma3:12b/step=prefill 1 5189777.78 ns/token 192.69 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18916330.00 ns/token 52.86 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 497661947 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 436251300 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2388074500 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4961000.00 ns/token 201.57 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18942640.00 ns/token 52.79 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 460614231 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 402181100 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2354106800 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4936888.89 ns/token 202.56 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18900510.00 ns/token 52.91 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 479590646 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 420896900 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2368448800 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4914444.44 ns/token 203.48 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18811520.00 ns/token 53.16 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 499372533 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 440477400 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2378938300 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4936222.22 ns/token 202.58 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18985570.00 ns/token 52.67 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 634412244 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 574020600 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2531531000 ns/op
+BenchmarkModel/name=gemma3:12b/step=prefill 1 4941444.44 ns/token 202.37 token/sec
+BenchmarkModel/name=gemma3:12b/step=generate 1 18785260.00 ns/token 53.23 token/sec
+BenchmarkModel/name=gemma3:12b/step=ttft 1 475022869 ns/op
+BenchmarkModel/name=gemma3:12b/step=load 1 416627900 ns/op
+BenchmarkModel/name=gemma3:12b/step=total 1 2352614300 ns/op
+# Model: gemma4 | Params: 8.0B | Quant: Q4_K_M | Family: gemma4 | Size: 3281644419 | VRAM: 3281644419 | NumCtx: 4096
+BenchmarkModel/name=gemma4/step=prefill 1 2907666.67 ns/token 343.92 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9948810.00 ns/token 100.51 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 456549861 ns/op
+BenchmarkModel/name=gemma4/step=load 1 424970800 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1450196800 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2803222.22 ns/token 356.73 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9884230.00 ns/token 101.17 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 493332679 ns/op
+BenchmarkModel/name=gemma4/step=load 1 461904900 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1480770800 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2838666.67 ns/token 352.28 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9811170.00 ns/token 101.92 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 452107380 ns/op
+BenchmarkModel/name=gemma4/step=load 1 420876800 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1431802500 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2817777.78 ns/token 354.89 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9619580.00 ns/token 103.95 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 461984329 ns/op
+BenchmarkModel/name=gemma4/step=load 1 429117500 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1420368400 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2821222.22 ns/token 354.46 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9630070.00 ns/token 103.84 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 500155254 ns/op
+BenchmarkModel/name=gemma4/step=load 1 470470600 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1462678500 ns/op
+BenchmarkModel/name=gemma4/step=prefill 1 2891222.22 ns/token 345.87 token/sec
+BenchmarkModel/name=gemma4/step=generate 1 9663620.00 ns/token 103.48 token/sec
+BenchmarkModel/name=gemma4/step=ttft 1 514932812 ns/op
+BenchmarkModel/name=gemma4/step=load 1 483646300 ns/op
+BenchmarkModel/name=gemma4/step=total 1 1480529500 ns/op
+# Model: lfm2.5 | Params: 8.5B | Quant: Q4_K_M | Family: lfm2moe | Size: 5254791822 | VRAM: 5254791822 | NumCtx: 4096
+BenchmarkModel/name=lfm2.5/step=prefill 1 108266300.00 ns/token 9.24 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3842220.00 ns/token 260.27 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 1370494496 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 281974600 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 1751460000 ns/op
+BenchmarkModel/name=lfm2.5/step=prefill 1 1650888.89 ns/token 605.73 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3757370.00 ns/token 266.14 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 253263288 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 231198300 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 624768100 ns/op
+BenchmarkModel/name=lfm2.5/step=prefill 1 1654222.22 ns/token 604.51 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3751200.00 ns/token 266.58 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 281684426 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 260100100 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 654668900 ns/op
+BenchmarkModel/name=lfm2.5/step=prefill 1 1649000.00 ns/token 606.43 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3708030.00 ns/token 269.68 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 290981803 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 272346100 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 660280100 ns/op
+BenchmarkModel/name=lfm2.5/step=prefill 1 1492500.00 ns/token 670.02 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3728850.00 ns/token 268.18 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 268194458 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 245809100 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 635809300 ns/op
+BenchmarkModel/name=lfm2.5/step=prefill 1 1639888.89 ns/token 609.80 token/sec
+BenchmarkModel/name=lfm2.5/step=generate 1 3760880.00 ns/token 265.90 token/sec
+BenchmarkModel/name=lfm2.5/step=ttft 1 235179525 ns/op
+BenchmarkModel/name=lfm2.5/step=load 1 216528300 ns/op
+BenchmarkModel/name=lfm2.5/step=total 1 610804600 ns/op
+# Model: qwen3.5:9b | Params: 9.7B | Quant: Q4_K_M | Family: qwen35 | Size: 5641055763 | VRAM: 5641055763 | NumCtx: 4096
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 5287625.00 ns/token 189.12 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 13732120.00 ns/token 72.82 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 447932402 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 377824900 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1820181700 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 4761125.00 ns/token 210.03 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 13701260.00 ns/token 72.99 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 406169301 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 335756600 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1774962500 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 4834250.00 ns/token 206.86 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 13867700.00 ns/token 72.11 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 403027744 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 331117700 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1788473200 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 5326625.00 ns/token 187.74 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 14226230.00 ns/token 70.29 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 405595853 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 328222400 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1826225200 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 4748500.00 ns/token 210.59 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 13673570.00 ns/token 73.13 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 370692024 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 303994400 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1736782600 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=prefill 1 5159625.00 ns/token 193.81 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=generate 1 13683200.00 ns/token 73.08 token/sec
+BenchmarkModel/name=qwen3.5:9b/step=ttft 1 487235715 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=load 1 414749600 ns/op
+BenchmarkModel/name=qwen3.5:9b/step=total 1 1854088000 ns/op
+# Model: granite4.1:8b | Params: 8.8B | Quant: Q4_K_M | Family: granite | Size: 5892242144 | VRAM: 5892242144 | NumCtx: 4096
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2830500.00 ns/token 353.29 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14157010.00 ns/token 70.64 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 228274646 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 195335000 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1642257600 ns/op
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2655000.00 ns/token 376.65 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14450700.00 ns/token 69.20 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 186932882 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 157564000 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1631633300 ns/op
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2709625.00 ns/token 369.05 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14140290.00 ns/token 70.72 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 236572342 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 206012100 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1649423300 ns/op
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2517250.00 ns/token 397.26 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14446880.00 ns/token 69.22 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 169431102 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 134969700 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1608483000 ns/op
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2711125.00 ns/token 368.85 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14380540.00 ns/token 69.54 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 185486429 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 154130400 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1622595700 ns/op
+BenchmarkModel/name=granite4.1:8b/step=prefill 1 2655625.00 ns/token 376.56 token/sec
+BenchmarkModel/name=granite4.1:8b/step=generate 1 14302140.00 ns/token 69.92 token/sec
+BenchmarkModel/name=granite4.1:8b/step=ttft 1 232362994 ns/op
+BenchmarkModel/name=granite4.1:8b/step=load 1 201631300 ns/op
+BenchmarkModel/name=granite4.1:8b/step=total 1 1660952700 ns/op
+# Model: gpt-oss:20b | Params: 20.9B | Quant: MXFP4 | Family: gptoss | Size: 14029495990 | VRAM: 10308529684 | NumCtx: 4096
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 6685875.00 ns/token 149.57 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 16492260.00 ns/token 60.63 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 531878115 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 472405600 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 2179295900 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 123904625.00 ns/token 8.07 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 15840910.00 ns/token 63.13 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 1513923698 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 518008000 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 3097093100 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 7018250.00 ns/token 142.49 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 16146190.00 ns/token 61.93 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 678831185 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 613535300 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 2290017900 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 8506000.00 ns/token 117.56 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 16055930.00 ns/token 62.28 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 558961695 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 483879100 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 2162203900 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 8925000.00 ns/token 112.04 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 24989190.00 ns/token 40.02 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 602683938 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 524077900 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 3099390000 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=prefill 1 6234625.00 ns/token 160.39 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=generate 1 16319500.00 ns/token 61.28 token/sec
+BenchmarkModel/name=gpt-oss:20b/step=ttft 1 586181601 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=load 1 531150000 ns/op
+BenchmarkModel/name=gpt-oss:20b/step=total 1 2216822300 ns/op
+# Model: ministral-3:8b | Params: 8.9B | Quant: Q4_K_M | Family: mistral3 | Size: 5640898476 | VRAM: 5640898476 | NumCtx: 4096
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 3253777.78 ns/token 307.34 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 12613940.00 ns/token 79.28 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 290750677 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 253911700 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1551091200 ns/op
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 2009444.44 ns/token 497.65 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 12596600.00 ns/token 79.39 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 263340814 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 235262100 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1522097100 ns/op
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 2000000.00 ns/token 500.00 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 12575880.00 ns/token 79.52 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 260072000 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 231934100 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1515593500 ns/op
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 2014444.44 ns/token 496.41 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 12926840.00 ns/token 77.36 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 272635844 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 244733300 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1564106000 ns/op
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 2020000.00 ns/token 495.05 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 13313590.00 ns/token 75.11 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 343112638 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 314312600 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1672690000 ns/op
+BenchmarkModel/name=ministral-3:8b/step=prefill 1 2046555.56 ns/token 488.63 token/sec
+BenchmarkModel/name=ministral-3:8b/step=generate 1 12677490.00 ns/token 78.88 token/sec
+BenchmarkModel/name=ministral-3:8b/step=ttft 1 265861732 ns/op
+BenchmarkModel/name=ministral-3:8b/step=load 1 238507600 ns/op
+BenchmarkModel/name=ministral-3:8b/step=total 1 1530870600 ns/op
+# Model: ministral-3:14b | Params: 13.9B | Quant: Q4_K_M | Family: mistral3 | Size: 8721971281 | VRAM: 8721971281 | NumCtx: 4096
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 4600555.56 ns/token 217.37 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19216940.00 ns/token 52.04 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 348121861 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 296019100 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2268437300 ns/op
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 2993666.67 ns/token 334.04 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19254120.00 ns/token 51.94 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 316150967 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 278311100 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2240613500 ns/op
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 2987888.89 ns/token 334.68 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19459370.00 ns/token 51.39 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 285315716 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 248256600 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2230562300 ns/op
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 2991222.22 ns/token 334.31 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19248190.00 ns/token 51.95 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 271080443 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 230649000 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2194365500 ns/op
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 2982888.89 ns/token 335.25 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19508820.00 ns/token 51.26 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 290120972 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 249819400 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2239548700 ns/op
+BenchmarkModel/name=ministral-3:14b/step=prefill 1 2999444.44 ns/token 333.40 token/sec
+BenchmarkModel/name=ministral-3:14b/step=generate 1 19234060.00 ns/token 51.99 token/sec
+BenchmarkModel/name=ministral-3:14b/step=ttft 1 294830629 ns/op
+BenchmarkModel/name=ministral-3:14b/step=load 1 257302600 ns/op
+BenchmarkModel/name=ministral-3:14b/step=total 1 2217107500 ns/op
+# Model: qwen2.5:14b | Params: 14.8B | Quant: Q4_K_M | Family: qwen2 | Size: 9470098799 | VRAM: 9470098799 | NumCtx: 4096
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 4165625.00 ns/token 240.06 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20761540.00 ns/token 48.17 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 246429215 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 201645000 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2321302700 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 3786375.00 ns/token 264.10 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20643829.99 ns/token 48.44 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 241329869 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 199658400 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2304786300 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 3827500.00 ns/token 261.27 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20686239.99 ns/token 48.34 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 248487804 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 206322200 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2316365200 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 3753000.00 ns/token 266.45 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20733100.00 ns/token 48.23 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 265445679 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 224738900 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2337699800 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 3776125.00 ns/token 264.82 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20674560.00 ns/token 48.37 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 305608729 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 263242700 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2371869600 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=prefill 1 3758750.00 ns/token 266.05 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=generate 1 20727810.00 ns/token 48.24 token/sec
+BenchmarkModel/name=qwen2.5:14b/step=ttft 1 245925083 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=load 1 203904000 ns/op
+BenchmarkModel/name=qwen2.5:14b/step=total 1 2316832400 ns/op
+# Model: qwen2.5:7b | Params: 7.6B | Quant: Q4_K_M | Family: qwen2 | Size: 4748056984 | VRAM: 4748056984 | NumCtx: 4096
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2368375.00 ns/token 422.23 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11014620.00 ns/token 90.79 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 227262435 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 201266600 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1326321900 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2147250.00 ns/token 465.71 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11025460.00 ns/token 90.70 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 223684459 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 201076200 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1325258600 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2150625.00 ns/token 464.98 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11057580.00 ns/token 90.44 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 229029523 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 204482200 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1332853600 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2148500.00 ns/token 465.44 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11058020.00 ns/token 90.43 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 230928344 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 208375500 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1336246800 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2149875.00 ns/token 465.14 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11057010.00 ns/token 90.44 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 213019817 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 189021100 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1317572600 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=prefill 1 2145000.00 ns/token 466.20 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=generate 1 11142630.00 ns/token 89.75 token/sec
+BenchmarkModel/name=qwen2.5:7b/step=ttft 1 270139568 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=load 1 247294200 ns/op
+BenchmarkModel/name=qwen2.5:7b/step=total 1 1383438400 ns/op
