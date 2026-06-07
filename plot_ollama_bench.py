@@ -2,8 +2,11 @@
 import sys
 import re
 import argparse
+import os
 import matplotlib.pyplot as plt
 import numpy as np
+
+DEFAULT_REPORT_DIR = "cmd/bench/report"
 
 def parse_raw_bench():
     content = sys.stdin.read()
@@ -156,6 +159,13 @@ def generate_plot(data, output_filename=None):
         # Truncate filename if it gets crazily long
         if len(output_filename) > 120:
             output_filename = "ollama_multi_model_comparison.png"
+
+        report_dir = os.getenv("REPORT_DIR", DEFAULT_REPORT_DIR)
+        output_filename = os.path.join(report_dir, output_filename)
+
+    output_dir = os.path.dirname(output_filename)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
     plt.savefig(output_filename, dpi=300)
     print(f"📊 Chart successfully generated for: {', '.join(models)}")
